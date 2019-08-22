@@ -26,8 +26,10 @@ public class UserServiceImp implements UserService {
     @Override
     public User login(User record) {
         User user = userMapper.login(record);
-        record.setLoginTime(new Date(SystemCurrentTimeUtil.getCurrentDate()));
-        userMapper.updateLoginTimeByOpenid(record);
+        if (user != null) {
+            user.setLoginTime(new Date(SystemCurrentTimeUtil.getCurrentDate()));
+            userMapper.updateLoginTimeByOpenid(user);
+        }
         return user;
     }
 }
