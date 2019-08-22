@@ -84,6 +84,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--分页插件-->
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+
 
     </dependencies>
 
@@ -102,26 +111,25 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>**/*.properties</include>
                 </includes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
                     <include>**/*.properties</include>
+
                 </includes>
             </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </resource>
+            <!--<resource>-->
+                <!--<directory>src/main/webapp</directory>-->
+                <!--<includes>-->
+                    <!--<include>**/*.js</include>-->
+                    <!--<include>**/*.html</include>-->
+
+                <!--</includes>-->
+            <!--</resource>-->
         </resources>
     </build>
 

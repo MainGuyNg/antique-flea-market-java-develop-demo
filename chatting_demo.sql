@@ -11,26 +11,73 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 15/08/2019 18:48:29
+ Date: 22/08/2019 14:12:59
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for demand
+-- Table structure for dynamite_comment
 -- ----------------------------
-DROP TABLE IF EXISTS `demand`;
-CREATE TABLE `demand`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `demand_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '需求id',
-  `publisher_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发布人openid',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '需求信息的标题',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '需求信息的内容',
-  `demand_status` int(2) NULL DEFAULT NULL COMMENT '需求信息的状态，1为上架，2为下架',
-  `demand_type` int(2) NULL DEFAULT NULL COMMENT '需求信息的类型，1为求购信息，2为出售信息',
-  `publish_time` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
-  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '编辑时间',
+DROP TABLE IF EXISTS `dynamite_comment`;
+CREATE TABLE `dynamite_comment`  (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `dynamite_comment_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态的评论id',
+  `dynamite_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '所属的动态信息的id',
+  `comment_user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论人的id',
+  `comment_user_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论人的昵称',
+  `comment_content` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论内容',
+  `dynamite_like_count` int(32) NULL DEFAULT NULL COMMENT '点赞数',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for dynamite_message
+-- ----------------------------
+DROP TABLE IF EXISTS `dynamite_message`;
+CREATE TABLE `dynamite_message`  (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `dynamite_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态信息id',
+  `publisher_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发布人的用户id',
+  `publisher_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '发布人名称',
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态标题',
+  `dynamite_content` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态内容',
+  `dynamite_content_img_url` varchar(10000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态的图片url，用逗号隔开',
+  `content_tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '动态所属标签',
+  `dynamite_like_count` int(32) NULL DEFAULT NULL COMMENT '点赞数',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for friend
+-- ----------------------------
+DROP TABLE IF EXISTS `friend`;
+CREATE TABLE `friend`  (
+  `id` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `user_id` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户id',
+  `friend_id` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友的用户id',
+  `friend_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友备注，如不填，则是默认的好友昵称',
+  `friend_group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友所在的群组id',
+  `is_special_attention` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '是否特别关注，0为否，1为特别关注',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加好友的时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for friend_group
+-- ----------------------------
+DROP TABLE IF EXISTS `friend_group`;
+CREATE TABLE `friend_group`  (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'user_id',
+  `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友群组id',
+  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '群组名',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '群组创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
@@ -39,7 +86,8 @@ CREATE TABLE `demand`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `openid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户的标识，对当前公众号唯一',
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'user_id',
+  `openid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户的标识，对当前公众号唯一',
   `unionid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。',
   `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '真实姓名',
   `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户的昵称',
@@ -58,12 +106,7 @@ CREATE TABLE `user`  (
   `register_time` datetime(0) NULL DEFAULT NULL COMMENT '注册时间',
   `login_time` datetime(0) NULL DEFAULT NULL COMMENT '最后登录时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  PRIMARY KEY (`openid`) USING BTREE
+  PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('omwUCs-Nj09Q8n1WzIqH7p046K9E', NULL, NULL, 'MainGuy', NULL, 01, NULL, NULL, NULL, '广州', '广东', '中国', 'http://thirdwx.qlogo.cn/mmopen/iblqyCwCBaz8VQbsvTfAicnc4LQDTp0iaIZ3A5GM9iarJwsm76KS1ZSwfkwWXNpA7cCGLjBs0KK9QdHIMtFYFTsJDMBhFXAGlU0d/132', '', '1', '1970-01-19 10:45:49', '2019-08-14 18:05:07', '2019-08-14 18:34:35', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunru.dao.DynamiteCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.xunru.model.DynamiteComment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="dynamite_comment_id" property="dynamiteCommentId" jdbcType="VARCHAR" />
+    <result column="dynamite_message_id" property="dynamiteMessageId" jdbcType="VARCHAR" />
+    <result column="comment_user_id" property="commentUserId" jdbcType="VARCHAR" />
+    <result column="comment_user_name" property="commentUserName" jdbcType="VARCHAR" />
+    <result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
+    <result column="dynamite_like_count" property="dynamiteLikeCount" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, dynamite_comment_id, dynamite_message_id, comment_user_id, comment_user_name, 
+    comment_content, dynamite_like_count, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dynamite_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dynamite_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xunru.model.DynamiteComment" >
+    insert into dynamite_comment (id, dynamite_comment_id, dynamite_message_id, 
+      comment_user_id, comment_user_name, comment_content, 
+      dynamite_like_count, create_time)
+    values (#{id,jdbcType=VARCHAR}, #{dynamiteCommentId,jdbcType=VARCHAR}, #{dynamiteMessageId,jdbcType=VARCHAR}, 
+      #{commentUserId,jdbcType=VARCHAR}, #{commentUserName,jdbcType=VARCHAR}, #{commentContent,jdbcType=VARCHAR}, 
+      #{dynamiteLikeCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xunru.model.DynamiteComment" >
+    insert into dynamite_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="dynamiteCommentId != null" >
+        dynamite_comment_id,
+      </if>
+      <if test="dynamiteMessageId != null" >
+        dynamite_message_id,
+      </if>
+      <if test="commentUserId != null" >
+        comment_user_id,
+      </if>
+      <if test="commentUserName != null" >
+        comment_user_name,
+      </if>
+      <if test="commentContent != null" >
+        comment_content,
+      </if>
+      <if test="dynamiteLikeCount != null" >
+        dynamite_like_count,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamiteCommentId != null" >
+        #{dynamiteCommentId,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamiteMessageId != null" >
+        #{dynamiteMessageId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUserId != null" >
+        #{commentUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUserName != null" >
+        #{commentUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="commentContent != null" >
+        #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamiteLikeCount != null" >
+        #{dynamiteLikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xunru.model.DynamiteComment" >
+    update dynamite_comment
+    <set >
+      <if test="dynamiteCommentId != null" >
+        dynamite_comment_id = #{dynamiteCommentId,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamiteMessageId != null" >
+        dynamite_message_id = #{dynamiteMessageId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUserId != null" >
+        comment_user_id = #{commentUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUserName != null" >
+        comment_user_name = #{commentUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="commentContent != null" >
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamiteLikeCount != null" >
+        dynamite_like_count = #{dynamiteLikeCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xunru.model.DynamiteComment" >
+    update dynamite_comment
+    set dynamite_comment_id = #{dynamiteCommentId,jdbcType=VARCHAR},
+      dynamite_message_id = #{dynamiteMessageId,jdbcType=VARCHAR},
+      comment_user_id = #{commentUserId,jdbcType=VARCHAR},
+      comment_user_name = #{commentUserName,jdbcType=VARCHAR},
+      comment_content = #{commentContent,jdbcType=VARCHAR},
+      dynamite_like_count = #{dynamiteLikeCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

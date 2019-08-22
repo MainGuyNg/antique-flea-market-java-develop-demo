@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URLEncoder;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping("/wechat")

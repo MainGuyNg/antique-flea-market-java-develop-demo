@@ -93,4 +93,16 @@ public class WXAuthUtil {
         }
         return user;
     }
+
+    public static String getToken(String openId) {
+        String key = "XUNRU";
+        Long date = System.currentTimeMillis();
+        String[] arr = new String[]{key, date.toString(), openId};
+        Arrays.sort(arr);
+        StringBuilder builder = new StringBuilder();
+        for (String str : arr) {
+            builder.append(str);
+        }
+        return MD5Util.getMD5(builder.toString());
+    }
 }
