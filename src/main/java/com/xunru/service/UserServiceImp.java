@@ -3,6 +3,7 @@ package com.xunru.service;
 import com.xunru.dao.UserMapper;
 import com.xunru.model.User;
 import com.xunru.utils.SystemCurrentTimeUtil;
+import com.xunru.utils.UUIDutil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ public class UserServiceImp implements UserService {
     @Override
     public Integer register(User record) {
         record.setRegisterTime(new Date(SystemCurrentTimeUtil.getCurrentDate()));
+        record.setUserId(UUIDutil.getUUID());
         Integer result = userMapper.register(record);
         return result;
     }

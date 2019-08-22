@@ -75,18 +75,4 @@ public class UserController {
         }
         return mvcObject;
     }
-
-    @RequestMapping("/test")
-    @ResponseBody
-    public MvcObject testMethod(String user,String pwd,String no,String tel){
-        List list =new ArrayList();
-        Map<String,Object> resultMap = new HashMap<>();
-        list.add(user);
-        list.add(pwd);
-        list.add(no);
-        list.add(tel);
-        resultMap.put("list",list);
-        MvcObject mvcObject = new MvcObject("","",resultMap);
-        return mvcObject;
-    }
 }

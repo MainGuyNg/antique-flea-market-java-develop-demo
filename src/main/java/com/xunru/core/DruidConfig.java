@@ -1,14 +1,11 @@
-package com.xunru.core.model;
+package com.xunru.core;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
-import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.io.VFS;
-import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,8 +142,8 @@ public class DruidConfig {
         //添加XML目录
         VFS.addImplClass(SpringBootVFS.class);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
-        logger.info("dao层扫描包为:mapper/*.xml");
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("com/xunru/dao/mapper/*.xml"));
+        logger.info("dao层扫描包为:com/xunru/dao/mapper/*.xml");
         return sqlSessionFactoryBean.getObject();
     }
 
