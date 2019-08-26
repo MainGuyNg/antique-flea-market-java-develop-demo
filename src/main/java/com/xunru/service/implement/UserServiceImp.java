@@ -37,10 +37,10 @@ public class UserServiceImp implements UserService {
             friendGroup.setUserId(record.getUserId());
             friendGroup.setGroupName("我的关注");
             friendGroup.setCreateTime(new Date(SystemCurrentTimeUtil.getCurrentDate()));
-            System.out.println(record.getNickname() + "已完成注册，成功新增" + friendGroupMapper.insertSelective(friendGroup) + "个分组");
+            System.out.println(record.getNickname() + "成功新增" + friendGroupMapper.insertSelective(friendGroup) + "个分组:" + friendGroup.getGroupName());
             friendGroup.setGroupId(UUIDutil.getUUID());
             friendGroup.setGroupName("特别关注");
-            System.out.println(record.getNickname() + "已完成注册，成功新增" + friendGroupMapper.insertSelective(friendGroup) + "个分组");
+            System.out.println(record.getNickname() + "成功新增" + friendGroupMapper.insertSelective(friendGroup) + "个分组:" + friendGroup.getGroupName());
         }
         return result;
     }
