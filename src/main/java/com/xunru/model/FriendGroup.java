@@ -1,16 +1,11 @@
 package com.xunru.model;
 
-import lombok.Data;
-
 import java.util.Date;
 
-@Data
 public class FriendGroup {
-    private String id;
+    private String groupId;
 
     private String userId;
-
-    private String groupId;
 
     private String groupName;
 
@@ -18,4 +13,43 @@ public class FriendGroup {
 
     private Date updateTime;
 
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId == null ? null : groupId.trim();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName == null ? null : groupName.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

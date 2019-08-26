@@ -7,6 +7,7 @@ import com.xunru.service.UserService;
 import com.xunru.utils.ReplaceGetWechatUserInfoUrlUtil;
 import com.xunru.utils.WXAuthUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -53,10 +52,10 @@ public class UserController {
             if (queryUser == null) {
                 int result = userService.register(user);
                 if (result == 0) {
-                    mvcObject = new MvcObject("400", "注册失败");
+                    mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
                     throw new Exception();
                 } else {
-                    mvcObject = new MvcObject("200", "注册成功");
+                    mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
                     //带着openId直接重定向回这个方法
                     response.sendRedirect("../user/login?openId=" + openId);
                 }
@@ -65,8 +64,13 @@ public class UserController {
                 session.setAttribute("user", queryUser);
                 session.setMaxInactiveInterval(SESSION_VALID_TIME);
                 resultMap.put("user", queryUser);
-                resultMap.put("token",WXAuthUtil.getToken(openId));
-                mvcObject = new MvcObject("200", "登录成功", resultMap);
+                resultMap.put("token", WXAuthUtil.getToken(openId));
+                //当用户真实姓名或者所在公司填写为空时，跳转到相对应的资料填写页面
+                if ("".equals(queryUser.getRealName()) || queryUser.getRealName() == null || "".equals(queryUser.getCompanyName()) || queryUser.getCompanyName() == null) {
+                    mvcObject = new MvcObject(MvcObject.STATUS_505, "真实姓名或者所在公司没有数据，为第一次登陆", resultMap);
+                } else {
+                    mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200), resultMap);
+                }
             }
         } else {
             System.out.println("access token为空或者access token非法，重新获取access token");
@@ -74,5 +78,32 @@ public class UserController {
             response.sendRedirect("../wechat/authorize");
         }
         return mvcObject;
+    }
+
+    @RequestMapping("/updateUserInfo")
+    @ResponseBody
+    public MvcObject updateUserInfo(User user, HttpServletRequest request) {
+        MvcObject mvcObject = null;
+        HttpSession session = request.getSession();
+        if (user == null) {
+            mvcObject = new MvcObject(MvcObject.STATUS_505, MvcObject.getStatusDesc(MvcObject.STATUS_505));
+        } else {
+            int result = userService.updateUserInfo(user);
+            if (result == 0) {
+                mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
+            } else {
+                //修改信息以后更新session域中的user信息
+                session.setAttribute("user", userService.selectUserByPrimaryKey(user.getUserId()));
+                mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
+            }
+        }
+        return mvcObject;
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
     }
 }

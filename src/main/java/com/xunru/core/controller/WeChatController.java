@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 @Controller
@@ -25,9 +26,9 @@ public class WeChatController {
     private WxMpService wxMpService;
 
     @GetMapping("/authorize")
-    public String authorize() {
+    public String authorize() throws UnsupportedEncodingException {
         String url = "http://mgtest2018.free.idcfengye.com/wechat/userInfo";
-        String redirectURL = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(RETURN_URL));
+        String redirectURL = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(RETURN_URL,"UTF-8"));
         return "redirect:" + redirectURL;
     }
 

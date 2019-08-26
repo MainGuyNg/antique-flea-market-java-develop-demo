@@ -22,4 +22,6 @@ public interface UserMapper {
     int register(User record);
 
     int updateLoginTimeByOpenid(User record);
+
+    int updateUserInfo(User record);
 }
