@@ -1,7 +1,8 @@
-package com.xunru.service;
+package com.xunru.service.implement;
 
 import com.xunru.dao.FriendMapper;
 import com.xunru.model.Friend;
+import com.xunru.service.FriendService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,7 +1,8 @@
-package com.xunru.service;
+package com.xunru.service.implement;
 
 import com.xunru.dao.FriendGroupMapper;
 import com.xunru.model.FriendGroup;
+import com.xunru.service.FriendGroupService;
 import com.xunru.utils.SystemCurrentTimeUtil;
 import com.xunru.utils.UUIDutil;
 import org.springframework.stereotype.Service;
