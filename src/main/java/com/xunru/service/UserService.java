@@ -2,6 +2,8 @@ package com.xunru.service;
 
 import com.xunru.model.User;
 
+import java.util.List;
+
 public interface UserService {
     User selectUserByPrimaryKey(String userId);
 
@@ -10,4 +12,6 @@ public interface UserService {
     User login(User record);
 
     Integer updateUserInfo(User record);
+
+    List<User> queryUserByNickname(String nickname);
 }

@@ -31,6 +31,12 @@ public class FriendGroupServiceImp implements FriendGroupService {
     }
 
     @Override
+    public FriendGroup queryFriendGroupByUserIdAndGroupName(String userId, String groupName) {
+        FriendGroup friendGroup = friendGroupMapper.queryFriendGroupByUserIdAndGroupName(userId, groupName);
+        return friendGroup;
+    }
+
+    @Override
     public Integer addFriendGroup(String userId, String groupName) {
         FriendGroup friendGroup = new FriendGroup();
         friendGroup.setGroupId(UUIDutil.getUUID());
@@ -44,7 +50,7 @@ public class FriendGroupServiceImp implements FriendGroupService {
 
     @Override
     public Integer deleteFriendGroup(String userId, String groupId) {
-        int result = friendGroupMapper.deleteFriendGroup(userId,groupId);
+        int result = friendGroupMapper.deleteFriendGroup(userId, groupId);
         return result;
     }
 }

@@ -418,4 +418,10 @@
             modify_time=#{modifyTime,jdbcType=TIMESTAMP},
         where user_id=#{userId,jdbcType=VARCHAR}
     </update>
+    <select id="queryUserByNickname" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where nickname=#{nickname,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -1,6 +1,9 @@
 package com.xunru.dao;
 
 import com.xunru.model.User;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface UserMapper {
     int deleteByPrimaryKey(String userId);
@@ -16,7 +19,7 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
 
-
+    //自定义方法
     User login(User record);
 
     int register(User record);
@@ -24,4 +27,6 @@ public interface UserMapper {
     int updateLoginTimeByOpenid(User record);
 
     int updateUserInfo(User record);
+
+    List<User> queryUserByNickname(@Param("nickname") String nickname);
 }

@@ -21,4 +21,8 @@ public interface FriendMapper {
 
     //自定义方法
     List<Friend> queryFriendListOrderByFriendRemark(@Param("userId") String userId);
+
+    int addFriend(Friend record);
+
+    Friend queryFriendInfoByUserIdAndFriendId(@Param("userId") String userId, @Param("friendId") String friendId);
 }

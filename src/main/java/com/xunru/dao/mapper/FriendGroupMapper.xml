@@ -111,9 +111,16 @@
       insert into friend_group (group_id, user_id, group_name,create_time)
       values (#{groupId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    
+
     <delete id="deleteFriendGroup" parameterType="java.lang.String">
       delete from friend_group
       where user_id=#{userId,jdbcType=VARCHAR} and group_id=#{groupId,jdbcType=VARCHAR}
     </delete>
+
+    <select id="queryFriendGroupByUserIdAndGroupName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from friend_group
+        where user_id=#{userId,jdbcType=VARCHAR} and group_name=#{groupName,jdbcType=VARCHAR}
+    </select>
 </mapper>

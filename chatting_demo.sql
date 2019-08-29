@@ -11,7 +11,7 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 22/08/2019 15:18:29
+ Date: 29/08/2019 17:20:28
 */
 
 SET NAMES utf8mb4;
@@ -61,7 +61,7 @@ CREATE TABLE `friend`  (
   `friend_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友的用户id',
   `friend_remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友备注，如不填，则是默认的好友昵称',
   `friend_group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友所在的群组id',
-  `is_special_attention` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '是否特别关注，0为否，1为特别关注',
+  `is_special_attention` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '是否特别关注，0为否，1为特别关注',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加好友的时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -72,14 +72,19 @@ CREATE TABLE `friend`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `friend_group`;
 CREATE TABLE `friend_group`  (
-  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'id',
+  `group_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '好友群组id',
   `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'user_id',
-  `group_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '好友群组id',
   `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '群组名',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '群组创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`group_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of friend_group
+-- ----------------------------
+INSERT INTO `friend_group` VALUES ('3c2abeec96b840f194a78f087b2df79d', 'b654841c75ee4931b55c07a1a6d47dcb', '特别关注', '2019-08-27 14:26:39', NULL);
+INSERT INTO `friend_group` VALUES ('9655afb4e3f14abb9da854364df537ac', 'b654841c75ee4931b55c07a1a6d47dcb', '我的关注', '2019-08-27 14:26:39', NULL);
 
 -- ----------------------------
 -- Table structure for user
@@ -112,6 +117,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('7f238ff65c474347a3c974deeb527ec9', 'omwUCs-Nj09Q8n1WzIqH7p046K9E', NULL, NULL, 'MainGuy', NULL, 1, NULL, NULL, NULL, '广州', '广东', '中国', 'http://thirdwx.qlogo.cn/mmopen/iblqyCwCBaz8VQbsvTfAicnc4LQDTp0iaIZ3A5GM9iarJwsm76KS1ZSwfkwWXNpA7cCGLjBs0KK9QdHIMtFYFTsJDMBhFXAGlU0d/132', '', '1', '1970-01-19 10:45:49', '2019-08-22 15:15:25', '2019-08-22 15:15:25', NULL);
+INSERT INTO `user` VALUES ('b654841c75ee4931b55c07a1a6d47dcb', 'omwUCsNj09Q8n1WzIqH7p046K9E', NULL, NULL, 'MainGuy', NULL, 1, NULL, NULL, NULL, '广州', '广东', '中国', 'http://thirdwx.qlogo.cn/mmopen/iblqyCwCBaz8VQbsvTfAicnc4LQDTp0iaIZ3A5GM9iarJwsm76KS1ZSwfkwWXNpA7cCGLjBs0KK9QdHIMtFYFTsJDMBhFXAGlU0d/132', '', '1', '1970-01-19 10:45:49', '2019-08-27 14:26:39', '2019-08-27 14:26:41', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

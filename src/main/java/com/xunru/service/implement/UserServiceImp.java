@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service("userService")
 public class UserServiceImp implements UserService {
@@ -60,5 +61,11 @@ public class UserServiceImp implements UserService {
         record.setModifyTime(new Date(SystemCurrentTimeUtil.getCurrentDate()));
         Integer result = userMapper.updateUserInfo(record);
         return result;
+    }
+
+    @Override
+    public List<User> queryUserByNickname(String nickname) {
+        List<User> list = userMapper.queryUserByNickname(nickname);
+        return list;
     }
 }

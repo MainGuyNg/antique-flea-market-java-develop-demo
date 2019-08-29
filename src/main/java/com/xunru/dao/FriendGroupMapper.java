@@ -27,4 +27,6 @@ public interface FriendGroupMapper {
     int addFriendGroup(FriendGroup record);
 
     int deleteFriendGroup(@Param("userId") String userId, @Param("groupId") String groupId);
+
+    FriendGroup queryFriendGroupByUserIdAndGroupName(@Param("userId") String userId, @Param("groupName") String groupName);
 }

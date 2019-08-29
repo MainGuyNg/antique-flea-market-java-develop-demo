@@ -9,6 +9,8 @@ public interface FriendGroupService {
 
     List<FriendGroup> queryFriendGroupByUserId(String userId);
 
+    FriendGroup queryFriendGroupByUserIdAndGroupName(String userId, String groupName);
+
     Integer addFriendGroup(String userId, String groupName);
 
     Integer deleteFriendGroup(String userId, String groupId);

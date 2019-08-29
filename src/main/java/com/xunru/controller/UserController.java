@@ -7,7 +7,6 @@ import com.xunru.service.UserService;
 import com.xunru.utils.ReplaceGetWechatUserInfoUrlUtil;
 import com.xunru.utils.WXAuthUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,8 +15,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -34,7 +33,6 @@ public class UserController {
     @ResponseBody
     public MvcObject login(@RequestParam("openId") String openId, HttpServletRequest request, HttpServletResponse response) throws Exception {
         MvcObject mvcObject = null;
-        InputStream is = null;
         String requestUrl = null;
         User user = null;
         Map<String, Object> resultMap = new HashMap<>();
@@ -46,30 +44,36 @@ public class UserController {
             //工具类通过requestUrl获取userInfo
             user = WXAuthUtil.getUserInfo(requestUrl);
 
-            /*开始操作数据库*/
-            User queryUser = userService.login(user);
-            //当queryUser为空时执行注册操作，否则正常登录
-            if (queryUser == null) {
-                int result = userService.register(user);
-                if (result == 0) {
-                    mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
-                    throw new Exception();
-                } else {
-                    mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
-                    //带着openId直接重定向回这个方法
-                    response.sendRedirect("../user/login?openId=" + openId);
-                }
+            if (user == null) {
+                mvcObject = new MvcObject(MvcObject.STATUS_505, MvcObject.getStatusDesc(MvcObject.STATUS_505));
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", queryUser);
-                session.setMaxInactiveInterval(SESSION_VALID_TIME);
-                resultMap.put("user", queryUser);
-                resultMap.put("token", WXAuthUtil.getToken(openId));
-                //当用户真实姓名或者所在公司填写为空时，跳转到相对应的资料填写页面
-                if ("".equals(queryUser.getRealName()) || queryUser.getRealName() == null || "".equals(queryUser.getCompanyName()) || queryUser.getCompanyName() == null) {
-                    mvcObject = new MvcObject(MvcObject.STATUS_505, "真实姓名或者所在公司没有数据，为第一次登陆", resultMap);
+                //把openId里的"-"符号去掉
+                user.setOpenid(user.getOpenid().replace("-", ""));
+                /*开始操作数据库*/
+                User queryUser = userService.login(user);
+                //当queryUser为空时执行注册操作，否则正常登录
+                if (queryUser == null) {
+                    int result = userService.register(user);
+                    if (result == 0) {
+                        mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
+                        throw new Exception();
+                    } else {
+                        mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
+                        //带着openId直接重定向回这个方法
+                        response.sendRedirect("../user/login?openId=" + openId);
+                    }
                 } else {
-                    mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200), resultMap);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", queryUser);
+                    session.setMaxInactiveInterval(SESSION_VALID_TIME);
+                    resultMap.put("user", queryUser);
+                    resultMap.put("token", WXAuthUtil.getToken(openId));
+                    //当用户真实姓名或者所在公司填写为空时，跳转到相对应的资料填写页面
+                    if ("".equals(queryUser.getRealName()) || queryUser.getRealName() == null || "".equals(queryUser.getCompanyName()) || queryUser.getCompanyName() == null) {
+                        mvcObject = new MvcObject(MvcObject.STATUS_505, "真实姓名或者所在公司没有数据，为第一次登陆", resultMap);
+                    } else {
+                        mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200), resultMap);
+                    }
                 }
             }
         } else {
@@ -95,6 +99,41 @@ public class UserController {
                 //修改信息以后更新session域中的user信息
                 session.setAttribute("user", userService.selectUserByPrimaryKey(user.getUserId()));
                 mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
+            }
+        }
+        return mvcObject;
+    }
+
+    @RequestMapping("/queryUserByNickname")
+    @ResponseBody
+    public MvcObject queryUserByNickname(@RequestParam("nickname") String nickname, HttpServletRequest request) {
+        MvcObject mvcObject = null;
+        Map<String, Object> resultMap = new HashMap<>(16);
+
+        List<User> userList = userService.queryUserByNickname(nickname);
+        if (userList.size() >= 0) {
+            mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200));
+            resultMap.put("userList", userList);
+        } else {
+            mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
+        }
+        return mvcObject;
+    }
+
+    @RequestMapping("/queryFriendInfoByFriendId")
+    @ResponseBody
+    public MvcObject queryFriendInfoByFriendId(@RequestParam("friendId") String friendId, HttpServletRequest request) {
+        MvcObject mvcObject = null;
+        Map<String, Object> resultMap = new HashMap<>();
+        if (friendId == null || "".equals(friendId)) {
+            mvcObject = new MvcObject(MvcObject.STATUS_505, MvcObject.getStatusDesc(MvcObject.STATUS_505));
+        } else {
+            User queryUser = userService.selectUserByPrimaryKey(friendId);
+            if (queryUser == null) {
+                mvcObject = new MvcObject(MvcObject.STATUS_500, MvcObject.getStatusDesc(MvcObject.STATUS_500));
+            } else {
+                resultMap.put("user", queryUser);
+                mvcObject = new MvcObject(MvcObject.STATUS_200, MvcObject.getStatusDesc(MvcObject.STATUS_200), resultMap);
             }
         }
         return mvcObject;
